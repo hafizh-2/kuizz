@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soal Bahasa Arab Sederhana</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8; /* Warna latar belakang yang lebih lembut */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh; /* Memastikan tampilan penuh tinggi layar */
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box; /* Menjamin padding diakui dalam tinggi total */
+        }
+        h1 {
+            color: #4A4A4A;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 2.2em; /* Ukuran font judul yang lebih besar */
+        }
+        .question {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px; /* Meningkatkan padding untuk ruang tambahan */
+            text-align: center;
+            max-width: 600px; /* Mengatur lebar maksimum kontainer */
+            width: 90%; /* Menetapkan lebar untuk responsif */
+            box-sizing: border-box; /* Menghitung padding dalam lebar total */
+        }
+        .question p {
+            font-size: 1.5em; /* Ukuran font untuk soal lebih besar */
+            margin: 10px 0; /* Margin atas dan bawah */
+        }
+        .image-container {
+            display: grid; /* Menggunakan grid untuk dua kolom */
+            grid-template-columns: repeat(2, 1fr); /* Dua kolom dengan lebar sama */
+            gap: 15px; /* Jarak antar gambar */
+            margin-bottom: 15px; /* Memberikan jarak di bawah gambar */
+        }
+        .image-container img {
+            width: 100%; /* Membuat gambar memenuhi kolom */
+            height: 200px; /* Menetapkan tinggi gambar yang sama */
+            object-fit: cover; /* Memastikan gambar terpotong sesuai dengan kotak */
+            border-radius: 10px; /* Sudut gambar melengkung */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s, border 0.2s; /* Transisi untuk efek hover */
+            cursor: pointer; /* Mengubah kursor menjadi pointer saat hover */
+        }
+        .image-container img:hover {
+            transform: scale(1.05); /* Efek zoom pada hover */
+            border: 2px solid #4CAF50; /* Tambah border saat hover */
+        }
+        .options {
+            display: flex;
+            flex-direction: column; /* Mengatur opsi dalam kolom */
+            align-items: center; /* Pusatkan opsi */
+            margin-bottom: 15px; /* Memberikan jarak antara opsi dan tombol */
+        }
+        .option {
+            display: flex;
+            align-items: center; /* Pusatkan opsi secara vertikal */
+            justify-content: center; /* Pusatkan opsi secara horizontal */
+            margin: 8px 0; /* Jarak antar opsi */
+            width: 100%; /* Membuat opsi memenuhi lebar kontainer */
+        }
+        .button-container {
+            display: flex;
+            justify-content: center; /* Menyusun tombol di tengah */
+            align-items: center; /* Memastikan tombol sejajar dengan teks */
+            margin-top: 15px; /* Memberikan jarak antara opsi dan tombol */
+        }
+        .feedback {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center; /* Pusatkan umpan balik */
+            font-size: 1.1em; /* Ukuran font yang sedikit lebih besar */
+        }
+        button {
+            padding: 12px 25px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 150px; /* Ukuran lebar tombol yang lebih konsisten */
+            box-sizing: border-box; /* Menghitung padding dalam lebar total */
+            font-size: 1em; /* Ukuran font tombol */
+            margin-top: 10px; /* Memberikan margin atas pada tombol */
+            margin-bottom: 20px; /* Memberikan jarak di bawah tombol */
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        input[type="radio"] {
+            margin-right: 10px; /* Memberikan margin kanan pada radio button */
+        }
+        label {
+            color: #333;
+            font-weight: 500;
+            font-size: 1.2em; /* Ukuran font label lebih besar */
+        }
+
+        /* Media Queries untuk tampilan responsif */
+        @media (max-width: 600px) {
+            .image-container {
+                grid-template-columns: 1fr; /* Satu kolom untuk layar kecil */
+            }
+            h1 {
+                font-size: 1.5em; /* Ukuran font judul untuk layar kecil */
+            }
+            .question {
+                width: 95%; /* Mengatur lebar kontainer di layar kecil */
+            }
+            .question p {
+                font-size: 1.2em; /* Ukuran font untuk soal di layar kecil */
+            }
+            button {
+                width: 100%; /* Tombol memenuhi lebar di layar kecil */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Soal Bahasa Arab</h1>
+    <div id="quiz-container"></div>
+    <p id="feedback" class="feedback"></p>
+
+    <script>
+        const questions = [
+            {
+                question: "Apa arti kata 'كتاب'?",
+                images: [
+                    "buku.jpg",
+                    "rumah.jpg",
+                    "pensil.jpg",
+                    "meja.jpg"
+                ],
+                options: [
+                    { answer: "Buku", correct: true },
+                    { answer: "Rumah", correct: false },
+                    { answer: "Pensil", correct: false },
+                    { answer: "Meja", correct: false }
+                ]
+            },
+            {
+                question: "Apa arti kata 'سيارة'?",
+                images: [
+                    "kapal.jpg",
+                    "sepeda.jpg",
+                    "pesawat.jpg",
+                    "mobil.jpg"
+                ],
+                options: [
+                    { answer: "Kapal", correct: false },
+                    { answer: "Sepeda", correct: false },   
+                    { answer: "Pesawat", correct: false },
+                    { answer: "Mobil", correct: true }
+                ]
+            },
+            {
+                question: "Apa arti kata 'بيت'?",
+                images: [
+                    "kota.jpg",
+                    "rumah.jpg",
+                    "pohon.jpg",
+                    "jalan.jpg"
+                ],
+                options: [
+                    { answer: "Kota", correct: false },
+                    { answer: "Rumah", correct: true },
+                    { answer: "Pohon", correct: false },
+                    { answer: "Jalan", correct: false }
+                ]
+            },
+            {
+                question: "Apa arti kata 'مدرسة'?",
+                images: [
+                    "kantor.jpg",
+                    "univ.jpg",
+                    "sekolah.jpg",
+                    "rumah.jpg"
+                ],
+                options: [
+                    { answer: "Kantor", correct: false },
+                    { answer: "Universitas", correct: false },
+                    { answer: "Sekolah", correct: true },
+                    { answer: "Rumah", correct: false }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0; // Menyimpan jumlah jawaban yang benar
+
+        function displayQuestion() {
+            if (currentQuestionIndex < questions.length) {
+                const question = questions[currentQuestionIndex];
+                const quizContainer = document.getElementById("quiz-container");
+                quizContainer.innerHTML = `
+                    <div class="question">
+                        <p>${question.question}</p>
+                        <div class="image-container">
+                            ${question.images.map((img, index) => `
+                                <div>
+                                    <img src="${img}" alt="Gambar" onclick="selectAnswer('${question.options[index].answer}')">
+                                    <div class="option">
+                                        <label>
+                                            <input type="radio" name="question" value="${question.options[index].answer}"> ${question.options[index].answer}
+                                        </label>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="button-container">
+                            <button onclick="checkAnswer()">Jawab</button>
+                        </div>
+                    </div>
+                `;
+                document.getElementById("feedback").textContent = ""; // Clear feedback
+            } else {
+                // Jika semua soal sudah dijawab
+                const finalScore = (score === questions.length) ? 100 : (score / questions.length) * 100; // Menetapkan skor 100 jika semua jawaban benar
+                document.getElementById("quiz-container").innerHTML = '';
+                document.getElementById("feedback").textContent = `Kamu telah menyelesaikan semua soal! Nilai Kamu: ${finalScore.toFixed(0)}`; // Hilangkan tanda /
+                document.getElementById("feedback").style.color = "blue";
+            }
+        }
+
+        function selectAnswer(answer) {
+            const options = document.getElementsByName("question");
+            options.forEach((option) => {
+                option.checked = option.value === answer; // Cek jika jawaban sesuai
+            });
+        }
+
+        function checkAnswer() {
+            const selectedOption = document.querySelector('input[name="question"]:checked');
+            const feedback = document.getElementById("feedback");
+            
+            if (!selectedOption) {
+                feedback.textContent = "Pilih salah satu jawaban.";
+                feedback.style.color = "orange";
+                return;
+            }
+
+            const answer = selectedOption.value;
+            const correctAnswer = questions[currentQuestionIndex].options.find(opt => opt.correct).answer;
+
+            if (answer === correctAnswer) {
+                feedback.textContent = "Jawaban Anda benar!";
+                feedback.style.color = "green";
+                score++; // Tambah nilai jika benar
+            } else {
+                feedback.textContent = `Jawaban Anda salah. Jawaban yang benar adalah "${correctAnswer}".`;
+                feedback.style.color = "red";
+            }
+            currentQuestionIndex++;
+            setTimeout(displayQuestion, 1000); // Mengurangi waktu jeda menjadi 1 detik
+        }
+
+        // Menampilkan soal pertama
+        displayQuestion();
+    </script>
+</body>
+</html>
